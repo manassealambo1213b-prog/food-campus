@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Resto</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-4 pb-20">
+<h1 class="text-2xl font-black">🍔 Dashboard Resto</h1>
+<p class="text-gray-500 mb-4">Gombe - William Booth</p>
+<div class="bg-white p-4 rounded-xl shadow mb-4">
+  <h2 class="font-bold mb-2">➕ Ajouter un plat au menu</h2>
+  <input id="nomPlat" placeholder="Nom ex: Shawarma" class="w-full border p-2 rounded-lg mb-2">
+  <input id="prixPlat" type="number" placeholder="Prix en CDF ex: 15000" class="w-full border p-2 rounded-lg mb-2">
+  <select id="catPlat" class="w-full border p-2 rounded-lg mb-2">
+    <option>Grillade</option><option>Pizza</option><option>Burger</option><option>Jus</option><option>Eau</option>
+  </select>
+  <input id="photoPlat" placeholder="Lien photo (ou laisse vide)" class="w-full border p-2 rounded-lg mb-2">
+  <button onclick="ajouterPlat()" class="w-full bg-orange-500 text-white py-2 rounded-lg font-bold">Ajouter au menu</button>
+</div>
+<div class="bg-white p-4 rounded-xl shadow mb-4">
+  <h2 class="font-bold mb-2">📋 Menu actuel</h2>
+  <div id="menuResto" class="space-y-2"></div>
+  <button onclick="reinitialiserMenu()" class="w-full mt-3 text-sm text-red-500 underline">Réinitialiser le menu (pour mettre l'Eau à 500)</button>
+</div>
+<h2 class="font-bold mb-2">🛵 Commandes</h2>
+<div id="liste" class="space-y-3"></div>
+<script>
+let platsDefaut = [
+  { nom: "Chawarma", prix: 15000, cat: "Grillade", photo: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=400", dispo: true },
+  { nom: "Poulet Mayo", prix: 25000, cat: "Grillade", photo: "https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=400", dispo: true },
+  { nom: "Pizza", prix: 30000, cat: "Pizza", photo: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400", dispo: true },
+  { nom: "Burger", prix: 20000, cat: "Burger", photo: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400", dispo: true },
+  { nom: "Jus d'Orange", prix: 5000, cat: "Jus", photo: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400", dispo: true },
+  { nom: "Jus de Mangue", prix: 6000, cat: "Jus", photo: "https://images.unsplash.com/photo-1553279768-865429fa0078?w=400", dispo: false },
+  { nom: "Eau Minérale 50cl", prix: 500, cat: "Eau", photo: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=400", dispo: true },
+];
+let plats = JSON.parse(localStorage.getItem('plats') || JSON.stringify(platsDefaut));
+let commandes = JSON.parse(localStorage.getItem('commandes') || "[]");
+function sauverPlats(){ localStorage.setItem('plats', JSON.stringify(plats)); }
+function reinitialiserMenu(){ localStorage.setItem('plats', JSON.stringify(platsDefaut)); plats = JSON.parse(JSON.stringify(platsDefaut)); afficherMenuResto(); alert("Menu réinitialisé ! Eau à 500."); }
+function afficherMenuResto(){
+  document.getElementById('menuResto').innerHTML = plats.map((p,i)=>`
+    <div class="flex justify-between items-center border-b pb-2">
+      <div><b>${p.nom}</b> - ${p.prix} CDF <span class="text-xs bg-gray-100 px-2 rounded">${p.cat}</span></div>
+      <button onclick="toggleDispo(${i})" class="px-3 py-1 rounded-full text-xs font-bold ${p.dispo?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}">${p.dispo?'Disponible ✅':'Indisponible ❌'}</button>
+    </div>`).join('');
+}
+function toggleDispo(i){ plats[i].dispo = !plats[i].dispo; sauverPlats(); afficherMenuResto(); }
+function ajouterPlat(){
+  let nom=document.getElementById('nomPlat').value, prix=parseInt(document.getElementById('prixPlat').value), cat=document.getElementById('catPlat').value, photo=document.getElementById('photoPlat').value || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400";
+  if(!nom||!prix){ alert("Mets nom et prix !"); return; }
+  plats.push({nom, prix, cat, photo, dispo:true}); sauverPlats(); afficherMenuResto();
+  document.getElementById('nomPlat').value=""; document.getElementById('prixPlat').value=""; document.getElementById('photoPlat').value="";
+  alert("Plat ajouté !");
+}
+function afficherCommandes(){
+  if(commandes.length===0){ document.getElementById('liste').innerHTML="<p class='bg-white p-4 rounded-xl text-center'>Aucune commande...</p>"; return; }
+  document.getElementById('liste').innerHTML = commandes.map((c,i)=>{
+    let detail="";
+    for(let k in c.panier){ if(c.panier[k]>0) detail+=`${c.panier[k]}x ${plats[k]?.nom || 'Plat'}<br>`; }
+    let largeur = c.statut==="Reçue"?25: c.statut==="En cuisine"?50: c.statut==="En route"?75:100;
+    return `<div class="bg-white p-4 rounded-xl shadow">
+      <div class="flex justify-between"><b>Commande #${i+1}</b><span class="bg-yellow-200 px-2 rounded-full text-sm">${c.statut}</span></div>
+      <p class="mt-2">👤 <b>${c.nom}</b><br>📞 ${c.tel}<br>📍 ${c.adresse || c.quartier || ''}</p>
+      <p class="my-2 border-t pt-2">${detail}</p>
+      <p class="font-bold">Total : ${c.total}</p>
+      <div class="bg-gray-200 h-2 rounded-full overflow-hidden my-2"><div class="bg-green-500 h-full" style="width:${largeur}%"></div></div>
+      <div class="flex gap-1 mt-2">
+        <button onclick="changerStatut(${i},'Reçue')" class="flex-1 bg-gray-200 py-2 rounded-lg text-xs">Reçue</button>
+        <button onclick="changerStatut(${i},'En cuisine')" class="flex-1 bg-orange-500 text-white py-2 rounded-lg text-xs">En cuisine</button>
+        <button onclick="changerStatut(${i},'En route')" class="flex-1 bg-blue-500 text-white py-2 rounded-lg text-xs">En route</button>
+        <button onclick="changerStatut(${i},'Livrée')" class="flex-1 bg-green-500 text-white py-2 rounded-lg text-xs">Livrée ✅</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function changerStatut(i,s){ commandes[i].statut=s; localStorage.setItem('commandes', JSON.stringify(commandes)); afficherCommandes(); }
+afficherMenuResto(); afficherCommandes();
+</script>
+</body>
+</html>

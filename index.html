@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FOOD CAMPUS - Gombe</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#FFF8F0;padding-bottom:140px}
+.header{background:#FF6B00;color:white;padding:20px;text-align:center;position:sticky;top:0;z-index:10}
+.header h1{font-size:28px}
+.header p{font-size:14px;opacity:.9}
+.info{background:white;margin:12px;border-radius:12px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.info input{width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:10px;font-size:16px}
+.cat{padding:10px 14px;font-size:20px;font-weight:bold}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 12px}
+.card{background:white;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.card img{width:100%;height:130px;object-fit:cover}
+.card-body{padding:10px}
+.card-body h3{font-size:15px}
+.price{color:#FF6B00;font-weight:bold;margin:6px 0}
+.qty{display:flex;justify-content:space-between;align-items:center}
+.qty button{width:36px;height:36px;border:none;border-radius:50%;font-size:20px;background:#FFE8D6;color:#FF6B00;font-weight:bold}
+.qty span{font-weight:bold}
+.cart{position:fixed;bottom:0;left:0;right:0;background:white;padding:14px;border-top:2px solid #eee;box-shadow:0 -4px 20px rgba(0,0,0,.1)}
+.total{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;margin-bottom:10px}
+.btn{width:100%;background:#25D366;color:white;border:none;padding:15px;border-radius:12px;font-size:17px;font-weight:bold}
+.small{text-align:center;font-size:12px;color:#888;margin-top:6px}
+</style>
+</head>
+<body>
+<div class="header"><h1>🍔 FOOD CAMPUS</h1><p>📍 Gombe - William Booth | Livraison Rapide 🛵</p></div>
+
+<div class="info">
+<input id="nom" placeholder="Ton Nom : Ex: Manassé">
+<input id="tel" placeholder="Ton WhatsApp : Ex: 0979501913">
+<input id="adresse" placeholder="Ton Adresse : Ex: Gombe, Av. ...">
+</div>
+
+<div class="cat">🔥 Grillade</div>
+<div class="grid">
+<div class="card"><img src="https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=600"><div class="card-body"><h3>Chawarma</h3><div class="price">15 000 CDF</div><div class="qty"><button onclick="change('Chawarma',15000,-1)">-</button><span id="q-Chawarma">0</span><button onclick="change('Chawarma',15000,1)">+</button></div></div></div>
+<div class="card"><img src="https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=600"><div class="card-body"><h3>Poulet Mayo</h3><div class="price">25 000 CDF</div><div class="qty"><button onclick="change('Poulet Mayo',25000,-1)">-</button><span id="q-Poulet Mayo">0</span><button onclick="change('Poulet Mayo',25000,1)">+</button></div></div></div>
+<div class="card"><img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600"><div class="card-body"><h3>Brochettes Poulet</h3><div class="price">12 000 CDF</div><div class="qty"><button onclick="change('Brochettes Poulet',12000,-1)">-</button><span id="q-Brochettes Poulet">0</span><button onclick="change('Brochettes Poulet',12000,1)">+</button></div></div></div>
+<div class="card"><img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600"><div class="card-body"><h3>Frites + Poulet</h3><div class="price">18 000 CDF</div><div class="qty"><button onclick="change('Frites + Poulet',18000,-1)">-</button><span id="q-Frites + Poulet">0</span><button onclick="change('Frites + Poulet',18000,1)">+</button></div></div></div>
+</div>
+
+<div class="cat">🍕 Pizza</div>
+<div class="grid">
+<div class="card"><img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600"><div class="card-body"><h3>Pizza Poulet</h3><div class="price">30 000 CDF</div><div class="qty"><button onclick="change('Pizza Poulet',30000,-1)">-</button><span id="q-Pizza Poulet">0</span><button onclick="change('Pizza Poulet',30000,1)">+</button></div></div></div>
+<div class="card"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600"><div class="card-body"><h3>Pizza Mixte</h3><div class="price">35 000 CDF</div><div class="qty"><button onclick="change('Pizza Mixte',35000,-1)">-</button><span id="q-Pizza Mixte">0</span><button onclick="change('Pizza Mixte',35000,1)">+</button></div></div></div>
+</div>
+
+<div class="cat">🍔 Burger</div>
+<div class="grid">
+<div class="card"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600"><div class="card-body"><h3>Burger Classique</h3><div class="price">20 000 CDF</div><div class="qty"><button onclick="change('Burger Classique',20000,-1)">-</button><span id="q-Burger Classique">0</span><button onclick="change('Burger Classique',20000,1)">+</button></div></div></div>
+<div class="card"><img src="https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=600"><div class="card-body"><h3>Burger Double</h3><div class="price">28 000 CDF</div><div class="qty"><button onclick="change('Burger Double',28000,-1)">-</button><span id="q-Burger Double">0</span><button onclick="change('Burger Double',28000,1)">+</button></div></div></div>
+</div>
+
+<div class="cat">🧃 Jus / Boisson</div>
+<div class="grid">
+<div class="card"><img src="https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=600"><div class="card-body"><h3>Jus d'Orange</h3><div class="price">3 000 CDF</div><div class="qty"><button onclick="change('Jus Orange',3000,-1)">-</button><span id="q-Jus Orange">0</span><button onclick="change('Jus Orange',3000,1)">+</button></div></div></div>
+<div class="card"><img src="https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=600"><div class="card-body"><h3>Jus de Mangue</h3><div class="price">3 500 CDF</div><div class="qty"><button onclick="change('Jus Mangue',3500,-1)">-</button><span id="q-Jus Mangue">0</span><button onclick="change('Jus Mangue',3500,1)">+</button></div></div></div>
+<div class="card"><img src="https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=600"><div class="card-body"><h3>Eau Minérale 50cl</h3><div class="price">500 CDF</div><div class="qty"><button onclick="change('Eau Minerale',500,-1)">-</button><span id="q-Eau Minerale">0</span><button onclick="change('Eau Minerale',500,1)">+</button></div></div></div>
+</div>
+
+<div class="cart">
+<div class="total"><span>Total :</span><span id="total">0 CDF</span></div>
+<button class="btn" onclick="commander()">COMMANDER SUR WHATSAPP 🛵</button>
+<div class="small">Ta commande arrive direct sur le WhatsApp du resto</div>
+</div>
+
+<script>
+let cart={};
+function change(nom,prix,delta){
+cart[nom]=(cart[nom]||0)+delta;
+if(cart[nom]<0)cart[nom]=0;
+document.getElementById('q-'+nom).innerText=cart[nom];
+let total=0;
+for(let k in cart){
+let p = k==='Chawarma'?15000:k==='Poulet Mayo'?25000:k==='Brochettes Poulet'?12000:k==='Frites + Poulet'?18000:k==='Pizza Poulet'?30000:k==='Pizza Mixte'?35000:k==='Burger Classique'?20000:k==='Burger Double'?28000:k==='Jus Orange'?3000:k==='Jus Mangue'?3500:k==='Eau Minerale'?500:0;
+total+=cart[k]*p;
+}
+document.getElementById('total').innerText=total.toLocaleString('fr-FR')+' CDF';
+}
+function commander(){
+let nom=document.getElementById('nom').value;
+let tel=document.getElementById('tel').value;
+let adresse=document.getElementById('adresse').value;
+if(!nom||!tel||!adresse){alert('Remplis Nom, WhatsApp et Adresse !');return;}
+let items='';let total=0;
+for(let k in cart){
+if(cart[k]>0){
+let p = k==='Chawarma'?15000:k==='Poulet Mayo'?25000:k==='Brochettes Poulet'?12000:k==='Frites + Poulet'?18000:k==='Pizza Poulet'?30000:k==='Pizza Mixte'?35000:k==='Burger Classique'?20000:k==='Burger Double'?28000:k==='Jus Orange'?3000:k==='Jus Mangue'?3500:k==='Eau Minerale'?500:0;
+items+='- '+cart[k]+'x '+k+' ('+(cart[k]*p)+' CDF)%0A';
+total+=cart[k]*p;
+}
+}
+if(total===0){alert('Choisis au moins 1 plat !');return;}
+let msg='🍔 NOUVELLE COMMANDE - FOOD CAMPUS%0A%0ANom: '+nom+'%0ATel: '+tel+'%0AAdresse: '+adresse+'%0A%0ACOMMANDE:%0A'+items+'%0ATOTAL: '+total+' CDF';
+window.open('https://wa.me/243979501913?text='+msg,'_blank');
+}
+</script>
+</body>
+</html>
