@@ -99,7 +99,7 @@ total+=cart[k]*p;
 if(total===0){alert('Choisis au moins 1 plat !');return;}
 let msg='🍔 NOUVELLE COMMANDE - FOOD CAMPUS%0A%0ANom: '+nom+'%0ATel: '+tel+'%0AAdresse: '+adresse+'%0A%0ACOMMANDE:%0A'+items+'%0ATOTAL: '+total+' CDF';
 
-fetch("https://script.google.com/macros/s/AKfycbyjkn-R9CF-5Dqb_cRUhXOQPTrH3qv0GSBofeDbbFal_yi7vWuLid9DAKF7kvWWuD2e/exec",{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify({nom:nom,tel:tel,adresse:adresse,commande:items,total:total})});
+fetch("https://script.google.com/macros/s/AKfycbzoZnjpNsI15VXE0_Xo-Ol_o_3tNCbIj92E_WBwdtdxe3yvgKRA4PE-Gkk4JCECMH5_/exec",{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({nom:nom,tel:tel,adresse:adresse,commande:items,total:total})});
 
 window.open('https://wa.me/243979501913?text='+msg,'_blank');
 }
